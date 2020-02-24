@@ -4,7 +4,7 @@ public class Node {
 	int coordenateX;												//easier axes to the coordenate X of this node
 	int coordenateY;												//easier axes to the coordenate Y of this node
 	boolean impassable;												//check if this this node is accessible
-	Node[] successors;										    	//keep track of the successors [below, left, right, top]
+	Node[] successors;										    	//keep track of the successors [lower, left, right, Upper]
 	Node comingFrom;												//keep track of where it comes from
 	
 	/*Here we will contain the cost, the x-axis, y-axis (to make it easier in some cases) and will create the array of the neighbors*/
@@ -33,16 +33,16 @@ public class Node {
 	}
 	
 	/*This four methods are used to keep track of the successors*/
-	public void setBelowSuccessor(Node b){
-		this.successors[0] = b;
+	public void setlowerSuccessor(Node low){
+		this.successors[0] = low;
 	}
-	public void setLeftSuccessor(Node l){								//left
-		this.successors[1] = l;
+	public void setLeftSuccessor(Node left){								//left
+		this.successors[1] = left;
 	}
-	public void setRightSuccessor(Node r){								//right
-		this.successors[2] = r;
+	public void setRightSuccessor(Node right){								//right
+		this.successors[2] = right;
 	}
-	public void setTopSuccessor(Node t){								//top
-		this.successors[3] = t;
+	public void setUpperSuccessor(Node Upper){								//Upper
+		this.successors[3] = Upper;
 	}
 }
