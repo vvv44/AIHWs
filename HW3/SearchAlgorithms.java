@@ -91,7 +91,7 @@ public class SearchAlgorithms{
         return Math.abs(source.coordenateX-target.coordenateX) + Math.abs(source.coordenateY-target.coordenateY);
     }
 
-    public void aStar(Graph g, int depthLimit){
+    public boolean aStar(Graph g, int depthLimit){
         PriorityQueue<Node> nextToVisit =new PriorityQueue<>(new Comparator<Node>(){
 			@Override
 			public int compare(Node fNode, Node sNode){											//put the smallest in front first
@@ -112,7 +112,7 @@ public class SearchAlgorithms{
 			if(current.equals(g.map[g.endx][g.endy])){
 				System.out.println("The path was found" );
 				g.findPath(g.map[g.endx][g.endy]);
-				return;
+				return true;
             }
             
             Node[] currSuccessors = current.successors;
@@ -123,6 +123,7 @@ public class SearchAlgorithms{
 				}
 			}
         }
+        return false;
 
 
     }

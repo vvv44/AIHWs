@@ -57,7 +57,6 @@ public class main {
 		Graph map = ReadFile(args[0]);
 		map.displayGraph();
 		map.generateSuccessor();
-		map.BreadtFirst();
 
 	}
 }
