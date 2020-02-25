@@ -48,24 +48,19 @@ public class Graph {
 	/**
 	 * Method to generate successors for a node, based on position, successors are adjacent Nodes, (only in four directions)
 	 */
-	public void generateSuccessor(){
-		for(int i=0; i<map.length;i++){
-			for(int j=0; j<map[i].length;j++){
-				if( ((i-1)>=0) && ((i-1)<map.length) && (map[i-1][j].impassable==false) ){					//lower
-					map[i][j].setlowerSuccessor(map[i-1][j]);
-				}
-				if( ((j-1)>=0) && ((j-1)<map[i].length) && (map[i][j-1].impassable==false) ){					//left
-					map[i][j].setLeftSuccessor(map[i][j-1]);
-				}
-				if( ((j+1)>=0) && ((j+1)<map[i].length) && (map[i][j+1].impassable==false) ){					//right
-					map[i][j].setRightSuccessor(map[i][j+1]);
-				}
-				if( ((i+1)>=0) && ((i+1)<map.length) && (map[i+1][j].impassable==false) ){					//Upper
-					map[i][j].setUpperSuccessor(map[i+1][j]);
-				}
-				
-			}
+	public void generateSuccessors(Node n){
+		if( ((n.coordenateY-1)>=0) && ((n.coordenateY-1)<map.length) && (map[n.coordenateY-1][n.coordenateX].impassable==false) ){					//lower
+			n.setlowerSuccessor(map[n.coordenateY-1][n.coordenateX]);
 		}
+		if( ((n.coordenateX-1)>=0) && ((n.coordenateX-1)<map[n.coordenateY].length) && (map[n.coordenateY][n.coordenateX-1].impassable==false) ){					//left
+			n.setLeftSuccessor(map[n.coordenateY][n.coordenateX-1]);
+		}
+		if( ((n.coordenateX+1)>=0) && ((n.coordenateX+1)<map[n.coordenateY].length) && (map[n.coordenateY][n.coordenateX+1].impassable==false) ){					//right
+			n.setRightSuccessor(map[n.coordenateY][n.coordenateX+1]);
+		}
+		if( ((n.coordenateY+1)>=0) && ((n.coordenateY+1)<map.length) && (map[n.coordenateY+1][n.coordenateX].impassable==false) ){					//Upper
+			n.setUpperSuccessor(map[n.coordenateY+1][n.coordenateX]);
+		}	
 	}
 	
 	/**

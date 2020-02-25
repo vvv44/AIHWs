@@ -57,7 +57,6 @@ public class main {
 		Graph map = ReadFile(args[0]);
 		SearchAlgorithms searcher =  new SearchAlgorithms();
 		map.displayGraph();
-		map.generateSuccessor();
 		
 		long startTime = System.nanoTime();
 		if(args[1].equalsIgnoreCase("BFS"))

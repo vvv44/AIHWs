@@ -17,24 +17,25 @@ public class SearchAlgorithms{
 
 		while(!nextToVisit.isEmpty()){
 			//Next position to visit by the algorithm
-			Node currentPos = nextToVisit.remove();
+			Node current = nextToVisit.remove();
 			
 			//Current position now added to previously visited
-			visitedPos.add(currentPos);								
+			visitedPos.add(current);								
 			
 			//Check if we arrived to the goal
-			if(currentPos.equals(g.map[g.endx][g.endy])){	
+			if(current.equals(g.map[g.endx][g.endy])){	
 				System.out.println("The path was found" );
 				g.printInfo(g.map[g.endx][g.endy]);
 				System.out.println("Number of nodes expanded: " + (visitedPos.size()+nextToVisit.size()));				
 				return true;
 			}
-			Node[] successorsOfCurrent = currentPos.successors;
+			g.generateSuccessors(current);
+			Node[] successorsOfCurrent = current.successors;
 			for(int i=0; i< successorsOfCurrent.length;i++){
 				if(!visitedPos.contains(successorsOfCurrent[i]) && successorsOfCurrent[i] !=null ){
 					nextToVisit.add(successorsOfCurrent[i]);	//add the next node that will need to visit
 					visitedPos.add(successorsOfCurrent[i]);		//add the nodes that are in the nexttoVisit already so we dont repeat
-					successorsOfCurrent[i].comingFrom = currentPos;	//set the nodes where they are coming from
+					successorsOfCurrent[i].comingFrom = current;	//set the nodes where they are coming from
 				}
 			}
 			
@@ -73,6 +74,7 @@ public class SearchAlgorithms{
 				System.out.println("Number of nodes expanded: " + (visitedPos.size()+nextToVisit.size()));
 				return true;
 			}
+			g.generateSuccessors(current);
 			Node[] currSuccessors = current.successors;
 			for(int i=0; i< currSuccessors.length;i++){
 				if(!visitedPos.contains(currSuccessors[i]) && currSuccessors[i] !=null ){
@@ -150,7 +152,7 @@ public class SearchAlgorithms{
 				System.out.println("Number of nodes expanded: " + (visitedPos.size()+nextToVisit.size()));
 				return true;
             }
-            
+            g.generateSuccessors(current);
             Node[] currSuccessors = current.successors;
 			for(int i=0; i< currSuccessors.length;i++){
 				if(!visitedPos.contains(currSuccessors[i]) && currSuccessors[i] !=null ){
