@@ -6,7 +6,8 @@ public class Node {
 	boolean impassable;												//check if this this node is accessible
 	Node[] successors;										    	//keep track of the successors [lower, left, right, Upper]
 	Node comingFrom;												//keep track of where it comes from
-	
+	int depth;
+
 	/*Here we will contain the cost, the x-axis, y-axis (to make it easier in some cases) and will create the array of the neighbors*/
 	public Node(int c,int x, int y){
 		this.cost = c;
@@ -19,6 +20,10 @@ public class Node {
 		}else{
 			this.impassable = false;
 		}
+	}
+
+	public void setDepth(int depth){
+		this.depth = depth;
 	}
 	
 	/* This metod will set the cost and impassable (check if it has 0)*/

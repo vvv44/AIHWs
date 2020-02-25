@@ -70,15 +70,19 @@ public class Graph {
 	
 	/**
 	 * Method to find path found by the algorithm
-	 * @param graph
+	 * @param node
 	 */
-	public void findPath(Node graph){
+	public void printInfo(Node node){
 		System.out.print("Reverse path: ");
-		while(graph.comingFrom !=null){
-			System.out.print(graph.cost+" ");
-			graph = graph.comingFrom;
+		int totCost = 0;
+		while(node.comingFrom !=null){
+			System.out.print("("+node.coordenateX+","+node.coordenateY+"), ");
+			node = node.comingFrom;
+			totCost+=node.cost;
 		}
-		System.out.println(graph.cost);
+		System.out.println();
+		System.out.println("Total cost: " + totCost);
+						
 	}
 	
 

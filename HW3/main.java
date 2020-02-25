@@ -55,8 +55,24 @@ public class main {
 
 	public static void main (String[] args) throws IOException {
 		Graph map = ReadFile(args[0]);
+		SearchAlgorithms searcher =  new SearchAlgorithms();
 		map.displayGraph();
 		map.generateSuccessor();
-
+		
+		long startTime = System.nanoTime();
+		if(args[1].equalsIgnoreCase("BFS"))
+			if(!searcher.BreadtFirst(map))
+				System.out.println("Cost: -1" + "   Path: Null");
+		else if(args[1].equalsIgnoreCase("IDS"))
+			if(!searcher.depthLimited(6,map))
+				System.out.println("Cost: -1" + "   Path: Null");
+		else if(args[1].equalsIgnoreCase("AS"))
+			if(!searcher.aStar(map))
+				System.out.println("Cost: -1" + "   Path: Null");
+		else
+			System.out.println("Invalid Input");
+		long endTime   = System.nanoTime();
+		long totalTime = endTime - startTime;
+		System.out.println("Running time in Miliseconds: " + totalTime/1000);
 	}
 }
