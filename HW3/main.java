@@ -57,19 +57,15 @@ public class main {
 		Graph map = ReadFile(args[0]);
 		SearchAlgorithms searcher =  new SearchAlgorithms();
 		map.displayGraph();
-		
+		String alg = args[1];
 		long startTime = System.nanoTime();
-		if(args[1].equalsIgnoreCase("BFS"))
-			if(!searcher.BreadtFirst(map))
-				System.out.println("Cost: -1" + "   Path: Null");
-		else if(args[1].equalsIgnoreCase("IDS"))
-			if(!searcher.depthLimited(6,map))
-				System.out.println("Cost: -1" + "   Path: Null");
-		else if(args[1].equalsIgnoreCase("AS"))
-			if(!searcher.aStar(map))
-				System.out.println("Cost: -1" + "   Path: Null");
-		else
-			System.out.println("Invalid Input");
+		if(alg.equals("BFS"))
+			searcher.BreadtFirst(map);
+		if(alg.equals("IDS"))
+			searcher.iterativeDeep(map);
+		if(alg.equals("AS"))
+			searcher.aStar(map);
+
 		long endTime   = System.nanoTime();
 		long totalTime = endTime - startTime;
 		System.out.println("Running time in Miliseconds: " + totalTime/1000);

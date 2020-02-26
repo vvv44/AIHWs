@@ -29,12 +29,12 @@ public class SearchAlgorithms{
 				System.out.println("Number of nodes expanded: " + (visitedPos.size()+nextToVisit.size()));				
 				return true;
 			}
+			//Generate next successors, add to queue if not null or not visited
 			g.generateSuccessors(current);
 			Node[] successorsOfCurrent = current.successors;
 			for(int i=0; i< successorsOfCurrent.length;i++){
 				if(!visitedPos.contains(successorsOfCurrent[i]) && successorsOfCurrent[i] !=null ){
 					nextToVisit.add(successorsOfCurrent[i]);	//add the next node that will need to visit
-					visitedPos.add(successorsOfCurrent[i]);		//add the nodes that are in the nexttoVisit already so we dont repeat
 					successorsOfCurrent[i].comingFrom = current;	//set the nodes where they are coming from
 				}
 			}
@@ -61,19 +61,21 @@ public class SearchAlgorithms{
 			//Next position to visit
 			Node current = nextToVisit.removeFirst();
 			current.setDepth(depth);
-			while(current.depth==depthLimit){
+			while(current.depth==depthLimit && !nextToVisit.isEmpty()){
 				current = nextToVisit.removeFirst();
 			}
 				
 			//Add to already visited to avoid revisiting
 			visitedPos.add(current);	
 
+			//Check if we arrived to goal
 			if(current.equals(g.map[g.endx][g.endy])){
 				System.out.println("The path was found" );
 				g.printInfo(g.map[g.endx][g.endy]);
 				System.out.println("Number of nodes expanded: " + (visitedPos.size()+nextToVisit.size()));
 				return true;
 			}
+			//Generate next successors, add to queue if not null or not visited
 			g.generateSuccessors(current);
 			Node[] currSuccessors = current.successors;
 			for(int i=0; i< currSuccessors.length;i++){
@@ -151,7 +153,8 @@ public class SearchAlgorithms{
 				g.printInfo(g.map[g.endx][g.endy]);
 				System.out.println("Number of nodes expanded: " + (visitedPos.size()+nextToVisit.size()));
 				return true;
-            }
+			}
+			//Generate next successors, add to queue if not null or not visited
             g.generateSuccessors(current);
             Node[] currSuccessors = current.successors;
 			for(int i=0; i< currSuccessors.length;i++){
