@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class main {
+public class Main {
 	public static Graph ReadFile(String fileName) throws IOException {
 		Graph execGraph = new Graph();										//Store the graph, goals, and source between others
 		try{

@@ -32,34 +32,23 @@ public class Graph {
 	public void displayGraph(){												
 		System.out.println("Start Coordinates ("+startx+","+starty+")");
 		System.out.println("End Coordinates ("+endx+","+endy+")");
-		System.out.println("Traverse Cost:");
-		for(int i=0; i< map.length;i++){
-			for(int j=0; j<map[i].length; j++){
-				if(!map[i][j].impassable){
-					System.out.print(map[i][j].cost+" ");
-				}else{
-					System.out.print("  ");
-				}
-			}
-			System.out.println();
-		}
 	}
 	
 	/**
 	 * Method to generate successors for a node, based on position, successors are adjacent Nodes, (only in four directions)
 	 */
 	public void generateSuccessors(Node n){
-		if( ((n.coordenateY-1)>=0) && ((n.coordenateY-1)<map.length) && (map[n.coordenateY-1][n.coordenateX].impassable==false) ){					//lower
-			n.setlowerSuccessor(map[n.coordenateY-1][n.coordenateX]);
+		if( ((n.coordinateY-1)>=0) && ((n.coordinateY-1)<map.length) && (map[n.coordinateY-1][n.coordinateX].impassable==false) ){					//lower
+			n.setlowerSuccessor(map[n.coordinateY-1][n.coordinateX]);
 		}
-		if( ((n.coordenateX-1)>=0) && ((n.coordenateX-1)<map[n.coordenateY].length) && (map[n.coordenateY][n.coordenateX-1].impassable==false) ){					//left
-			n.setLeftSuccessor(map[n.coordenateY][n.coordenateX-1]);
+		if( ((n.coordinateX-1)>=0) && ((n.coordinateX-1)<map[n.coordinateY].length) && (map[n.coordinateY][n.coordinateX-1].impassable==false) ){					//left
+			n.setLeftSuccessor(map[n.coordinateY][n.coordinateX-1]);
 		}
-		if( ((n.coordenateX+1)>=0) && ((n.coordenateX+1)<map[n.coordenateY].length) && (map[n.coordenateY][n.coordenateX+1].impassable==false) ){					//right
-			n.setRightSuccessor(map[n.coordenateY][n.coordenateX+1]);
+		if( ((n.coordinateX+1)>=0) && ((n.coordinateX+1)<map[n.coordinateY].length) && (map[n.coordinateY][n.coordinateX+1].impassable==false) ){					//right
+			n.setRightSuccessor(map[n.coordinateY][n.coordinateX+1]);
 		}
-		if( ((n.coordenateY+1)>=0) && ((n.coordenateY+1)<map.length) && (map[n.coordenateY+1][n.coordenateX].impassable==false) ){					//Upper
-			n.setUpperSuccessor(map[n.coordenateY+1][n.coordenateX]);
+		if( ((n.coordinateY+1)>=0) && ((n.coordinateY+1)<map.length) && (map[n.coordinateY+1][n.coordinateX].impassable==false) ){					//Upper
+			n.setUpperSuccessor(map[n.coordinateY+1][n.coordinateX]);
 		}	
 	}
 	
@@ -71,16 +60,13 @@ public class Graph {
 		System.out.print("Reverse path: ");
 		int totCost = 0;
 		while(node.comingFrom !=null){
-			System.out.print("("+node.coordenateX+","+node.coordenateY+"), ");
+			System.out.print("("+node.coordinateX+","+node.coordinateY+"), ");
 			node = node.comingFrom;
 			totCost+=node.cost;
 		}
 		System.out.println();
-		System.out.println("Total cost: " + totCost);
+		System.out.println("Path Total Cost: " + totCost);
 						
 	}
-	
-
-	
 	
 }

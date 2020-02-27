@@ -1,8 +1,8 @@
 
 public class Node {
 	int cost;														//The cost of the node
-	int coordenateX;												//easier axes to the coordenate X of this node
-	int coordenateY;												//easier axes to the coordenate Y of this node
+	int coordinateX;												//easier axes to the coordinate X of this node
+	int coordinateY;												//easier axes to the coordinate Y of this node
 	boolean impassable;												//check if this this node is accessible
 	Node[] successors;										    	//keep track of the successors [lower, left, right, Upper]
 	Node comingFrom;												//keep track of where it comes from
@@ -11,8 +11,8 @@ public class Node {
 	/*Here we will contain the cost, the x-axis, y-axis (to make it easier in some cases) and will create the array of the neighbors*/
 	public Node(int c,int x, int y){
 		this.cost = c;
-		this.coordenateX = x;
-		this.coordenateY = y;
+		this.coordinateX = x;
+		this.coordinateY = y;
 		successors = new Node[4];
 		
 		if(this.cost == 0){											//Set the places that can or cannot go through
@@ -26,7 +26,7 @@ public class Node {
 		this.depth = depth;
 	}
 	
-	/* This metod will set the cost and impassable (check if it has 0)*/
+	/* This method will set the cost and impassable (check if it has 0)*/
 	public void setCostImpassable(int c){
 		this.cost = c;
 		
