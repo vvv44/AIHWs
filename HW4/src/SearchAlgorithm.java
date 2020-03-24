@@ -37,6 +37,37 @@ public class SearchAlgorithm {
    * @return
    */
   private Schedule randomSuccessor(Schedule current, SchedulingProblem problem) {
+    //We will randomly decide how many classes to move to another time slot
+    int classesToModify = (int)Math.random()*10;
+    //We will then shift those classes to another time slot and/or room
+    for(int i = 0;i<current.schedule.length;i++){
+      int j = 0;
+      while(j<current.schedule[i].length && current.schedule[i][j]<0){
+        j++;
+      }
+      if(j==current.schedule[i].length){
+        continue;
+      }
+      //Here we are in the assigned class to the room i and time slot j.
+      /*We will shift the class to a new random room and timeslot that works for the class*/
+      int newRoom = (int)Math.random()*current.schedule.length;
+      while(newRoom<current.schedule.length){
+        
+        int newSlot = 0;
+        while(newSlot<current.schedule[newRoom].length){
+          //If class can be assigned to new time slot and slot is not taken yet we assign it
+          if(problem.courses.get(current.schedule[i][j]).timeSlotValues[newSlot]>0 && current.schedule[newRoom][newSlot]<0){
+            current.schedule[newRoom][newSlot] = current.schedule[i][j];
+            current.schedule[i][j] = -1;
+            break;
+          }
+          newSlot++;
+        }
+        if(current.schedule[i][j] == -1)
+          break;
+        newRoom = (int)Math.random()*current.schedule.length;
+      }
+    }
     return null;
   }
 
