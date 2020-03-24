@@ -52,7 +52,7 @@ public class SearchAlgorithm {
       /*We will shift the class to a new random room and timeslot that works for the class*/
       int newRoom = (int)Math.random()*current.schedule.length;
       while(newRoom<current.schedule.length){
-        
+        //We traverse the slots available in the new room
         int newSlot = 0;
         while(newSlot<current.schedule[newRoom].length){
           //If class can be assigned to new time slot and slot is not taken yet we assign it
@@ -63,6 +63,7 @@ public class SearchAlgorithm {
           }
           newSlot++;
         }
+        //If class assigned we move to next class
         if(current.schedule[i][j] == -1)
           break;
         newRoom = (int)Math.random()*current.schedule.length;
