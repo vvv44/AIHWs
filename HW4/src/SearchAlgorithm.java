@@ -25,7 +25,6 @@ public class SearchAlgorithm {
         }
       }
     }
-
     return solution;
   }
 
@@ -56,7 +55,7 @@ public class SearchAlgorithm {
         int newSlot = 0;
         while(newSlot<current.schedule[newRoom].length){
           //If class can be assigned to new time slot and slot is not taken yet we assign it
-          if(problem.courses.get(current.schedule[i][j]).timeSlotValues[newSlot]>0 && current.schedule[newRoom][newSlot]<0){
+          if(problem.courses.get(current.schedule[i][j]).timeSlotValues[newSlot]>0 && current.schedule[newRoom][newSlot]<0 && problem.courses.get(current.schedule[i][j]).enrolledStudents < problem.rooms.get(newRoom).capacity){
             current.schedule[newRoom][newSlot] = current.schedule[i][j];
             current.schedule[i][j] = -1;
             break;
@@ -69,7 +68,7 @@ public class SearchAlgorithm {
         newRoom = (int)Math.random()*current.schedule.length;
       }
     }
-    return null;
+    return current;
   }
 
   /**
@@ -82,9 +81,21 @@ public class SearchAlgorithm {
    * @return
    */
   private Schedule randomSolution(Schedule current, SchedulingProblem problem) {
-    
-    
-    return null;
+    /**
+     * We will assign classes to random rooms and time slots that are valid
+     */
+    for(int i = 0;i<problem.courses.size();i++){
+      boolean assigned = false;
+      while(!assigned){
+        int randomRoom = (int)Math.random()*current.schedule.length;
+        int randomTime = (int)Math.random()*current.schedule[0].length;
+        if(problem.courses.get(i).timeSlotValues[randomTime]>0 && problem.courses.get(i).enrolledStudents < problem.rooms.get(randomRoom).capacity){
+          current.schedule[randomRoom][randomTime] = i;
+          assigned = true;
+        }
+      }
+    }
+    return current;
   }
 
   public Schedule backtrackSearch(SchedulingProblem problem, long deadline) {
