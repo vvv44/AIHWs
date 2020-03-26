@@ -9,12 +9,12 @@ public class SearchAlgorithm {
     //Temperature value that will help simulate the annealing.
     double T = 1;
     //Limit to the annealing
-    long limit = 5000;
+    long limit = 50;
     //Initial Solution
     current = randomSolution(current,problem);
     //Change in score
     double scoreDelta = problem.evaluateSchedule(next)-problem.evaluateSchedule(current);
-
+    System.out.println("reached for loop");
     for(;T<limit;T++){
       next = randomSuccessor(current,problem);
       if(scoreDelta>0){
@@ -49,7 +49,7 @@ public class SearchAlgorithm {
       }
       //Here we are in the assigned class to the room i and time slot j.
       /*We will shift the class to a new random room and timeslot that works for the class*/
-      int newRoom = (int)Math.random()*current.schedule.length;
+      int newRoom = (int)(Math.random()*current.schedule.length);
       while(newRoom<current.schedule.length){
         //We traverse the slots available in the new room
         int newSlot = 0;
@@ -65,7 +65,7 @@ public class SearchAlgorithm {
         //If class assigned we move to next class
         if(current.schedule[i][j] == -1)
           break;
-        newRoom = (int)Math.random()*current.schedule.length;
+        newRoom = (int)(Math.random()*current.schedule.length);
       }
     }
     return current;
@@ -84,11 +84,13 @@ public class SearchAlgorithm {
     /**
      * We will assign classes to random rooms and time slots that are valid
      */
+    System.out.println("Before random solution for");
     for(int i = 0;i<problem.courses.size();i++){
+      System.out.println("Inside for random solution");
       boolean assigned = false;
       while(!assigned){
-        int randomRoom = (int)Math.random()*current.schedule.length;
-        int randomTime = (int)Math.random()*current.schedule[0].length;
+        int randomRoom = (int)(Math.random()*current.schedule.length);
+        int randomTime = (int)(Math.random()*current.schedule[0].length);
         if(problem.courses.get(i).timeSlotValues[randomTime]>0 && problem.courses.get(i).enrolledStudents < problem.rooms.get(randomRoom).capacity){
           current.schedule[randomRoom][randomTime] = i;
           assigned = true;
