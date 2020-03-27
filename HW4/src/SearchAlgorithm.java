@@ -126,6 +126,7 @@ public class SearchAlgorithm {
       System.out.println("Inside for random solution");
       boolean assigned = false;
       while(!assigned){
+        //FIXME: Does not end when class is unnasignable
         int randomRoom = (int)(Math.random()*current.schedule.length);
         int randomTime = (int)(Math.random()*current.schedule[0].length);
         if(problem.courses.get(i).timeSlotValues[randomTime]>0 && problem.courses.get(i).enrolledStudents < problem.rooms.get(randomRoom).capacity){
