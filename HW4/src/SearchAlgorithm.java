@@ -7,15 +7,14 @@ public class SearchAlgorithm {
     Schedule current = solution;
     Schedule next = solution;
     //Temperature value that will help simulate the annealing.
-    double T = 1;
+    double T = 5000;
     //Limit to the annealing
-    long limit = 50;
     //Initial Solution
     current = randomSolution(current,problem);
     //Change in score
     double scoreDelta = problem.evaluateSchedule(next)-problem.evaluateSchedule(current);
     System.out.println("reached for loop");
-    for(;T<limit;T++){
+    for(;T>0;T--){
       next = randomSuccessor(current,problem);
       if(scoreDelta>0){
         current = next;
@@ -36,8 +35,6 @@ public class SearchAlgorithm {
    * @return
    */
   private Schedule randomSuccessor(Schedule current, SchedulingProblem problem) {
-    //We will randomly decide how many classes to move to another time slot
-    int classesToModify = (int)Math.random()*10;
     //We will then shift those classes to another time slot and/or room
     for(int i = 0;i<current.schedule.length;i++){
       int j = 0;
@@ -49,7 +46,11 @@ public class SearchAlgorithm {
       }
       //Here we are in the assigned class to the room i and time slot j.
       /*We will shift the class to a new random room and timeslot that works for the class*/
-      int newRoom = (int)(Math.random()*current.schedule.length);
+      //int newRoom = (int)(Math.random()*current.schedule.length);
+
+      /**We can also choose the best room out of a random selection of rooms (best as in closest to desired buuilding by class)*/
+      int newRoom = bestRandomRoom(problem, current.schedule[i][j]);
+
       while(newRoom<current.schedule.length){
         //We traverse the slots available in the new room
         int newSlot = 0;
@@ -69,6 +70,42 @@ public class SearchAlgorithm {
       }
     }
     return current;
+  }
+
+  /**
+   * Method that will generate a few random rooms to choose from, and it will evaluate the one that is in closest to (or in the building) preferred
+   * by the class given
+   * @param problem
+   * @return
+   */
+  private int bestRandomRoom(SchedulingProblem problem, int currClass) {
+    //The number of rooms we will generate
+    int numOfRooms = (int)(Math.random()*problem.rooms.size());
+    int bestRoom = 0;
+    int currRoom = 0;
+    Building preferred = problem.courses.get(currClass).preferredLocation;
+    //We will iterate generating random rooms and keep the one that is closest to current class preferred building
+    for(int i = 0;i<numOfRooms;i++){
+      currRoom = (int)(Math.random()*problem.rooms.size());
+      //Check if it is better than current best room.
+      if(distanceOfBuilding(preferred,problem.rooms.get(currRoom).b)<distanceOfBuilding(preferred, problem.rooms.get(bestRoom).b)){
+        bestRoom = currRoom;
+      }
+    }
+
+    return bestRoom;
+  }
+
+  /**
+   * Method that provides distance between two buildings
+   * @param preferred
+   * @param b
+   * @return
+   */
+  private double distanceOfBuilding(Building b1, Building b2) {
+    double xDist = (b1.xCoord - b2.xCoord) * (b1.xCoord - b2.xCoord);
+    double yDist = (b1.yCoord - b2.yCoord) * (b1.yCoord - b2.yCoord);
+    return Math.sqrt(xDist + yDist);
   }
 
   /**
