@@ -14,11 +14,11 @@ public class SearchAlgorithm {
     //Limit to the annealing
     //Initial Solution
     current = randomSolution(current,problem);
-    //Change in score
-    double scoreDelta = problem.evaluateSchedule(next)-problem.evaluateSchedule(current);
-    System.out.println("reached for loop");
+    double scoreDelta;
     for(;T>0;T--){
       next = randomSuccessor(current,problem);
+      //Change in score
+      scoreDelta = problem.evaluateSchedule(next)-problem.evaluateSchedule(current);
       if(scoreDelta>0){
         current = next;
       }else{
@@ -53,7 +53,7 @@ public class SearchAlgorithm {
 
       /**We can also choose the best room out of a random selection of rooms (best as in closest to desired buuilding by class)*/
       int newRoom = bestRandomRoom(problem, current.schedule[i][j]);
-
+      //FIXME: Does not end when class is unassignable
       while(newRoom<current.schedule.length){
         //We traverse the slots available in the new room
         int newSlot = 0;
@@ -69,7 +69,7 @@ public class SearchAlgorithm {
         //If class assigned we move to next class
         if(current.schedule[i][j] == -1)
           break;
-        newRoom = (int)(Math.random()*current.schedule.length);
+        newRoom = bestRandomRoom(problem, current.schedule[i][j]);
       }
     }
     return current;
@@ -124,9 +124,8 @@ public class SearchAlgorithm {
     /**
      * We will assign classes to random rooms and time slots that are valid
      */
-    System.out.println("Before random solution for");
+
     for(int i = 0;i<problem.courses.size();i++){
-      System.out.println("Inside for random solution");
       boolean assigned = false;
       while(!assigned){
         //FIXME: Does not end when class is unnasignable
