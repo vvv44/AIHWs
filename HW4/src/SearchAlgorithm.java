@@ -11,11 +11,18 @@ public class SearchAlgorithm {
     Schedule next = solution;
     //Temperature value that will help simulate the annealing.
     double T = 5000;
-    //Limit to the annealing
+    //Starting time 
+    long startTime = System.nanoTime();
+
     //Initial Solution
     current = randomSolution(current,problem);
     double scoreDelta;
     for(;T>0;T--){
+      if(System.nanoTime()>(startTime+(deadline*1000000000))){
+        System.out.println("Time limit reached, returning currently achieved solution");
+        return solution;
+      }
+
       next = randomSuccessor(current,problem);
       //Change in score
       scoreDelta = problem.evaluateSchedule(next)-problem.evaluateSchedule(current);
@@ -27,7 +34,7 @@ public class SearchAlgorithm {
         }
       }
     }
-    return solution;
+    return current;
   }
 
   /**
@@ -69,6 +76,7 @@ public class SearchAlgorithm {
         //If class assigned we move to next class
         if(current.schedule[i][j] == -1)
           break;
+        //newRoom = (int)(Math.random()*current.schedule.length);
         newRoom = bestRandomRoom(problem, current.schedule[i][j]);
       }
     }
