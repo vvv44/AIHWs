@@ -15,7 +15,7 @@ public class SearchAlgorithm {
     long startTime = System.nanoTime();
 
     //Initial Solution
-    current = randomSolution(current,problem);
+    current = randomSolution(current,problem,deadline,startTime);
     double scoreDelta;
     for(;T>0;T--){
       if(System.nanoTime()>(startTime+(deadline*1000000000))){
@@ -23,7 +23,7 @@ public class SearchAlgorithm {
         return solution;
       }
 
-      next = randomSuccessor(current,problem);
+      next = randomSuccessor(current,problem,deadline,startTime);
       //Change in score
       scoreDelta = problem.evaluateSchedule(next)-problem.evaluateSchedule(current);
       if(scoreDelta>0){
@@ -44,7 +44,11 @@ public class SearchAlgorithm {
    * @param problem
    * @return
    */
-  private Schedule randomSuccessor(Schedule current, SchedulingProblem problem) {
+  private Schedule randomSuccessor(Schedule current, SchedulingProblem problem, long deadline,long startTime) {
+    if(System.nanoTime()>(startTime+(deadline*1000000000))){
+      System.out.println("Time limit reached, returning currently achieved solution");
+      return current;
+    }
     //We will then shift those classes to another time slot and/or room
     for(int i = 0;i<current.schedule.length;i++){
       int j = 0;
@@ -128,12 +132,16 @@ public class SearchAlgorithm {
    * @param problem
    * @return
    */
-  private Schedule randomSolution(Schedule current, SchedulingProblem problem) {
+  private Schedule randomSolution(Schedule current, SchedulingProblem problem, long deadline,long startTime) {
     /**
      * We will assign classes to random rooms and time slots that are valid
      */
 
     for(int i = 0;i<problem.courses.size();i++){
+      if(System.nanoTime()>(startTime+(deadline*1000000000))){
+        System.out.println("Time limit reached, returning currently achieved solution");
+        return current;
+      }
       boolean assigned = false;
       while(!assigned){
         //FIXME: Does not end when class is unnasignable
