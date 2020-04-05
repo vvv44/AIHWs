@@ -179,7 +179,9 @@ public class SearchAlgorithm {
     int roomIndex;
     int courseIndex;
 
-    /**Order rooms and courses by distance to provide the best solution possible */
+    /**Order rooms and courses by distance to provide the best solution possible 
+     * This is the heuristic
+    */
     orderCourses(problem.courses);
     orderRooms(problem.rooms);
 
