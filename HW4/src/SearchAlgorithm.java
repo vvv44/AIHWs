@@ -160,60 +160,44 @@ public class SearchAlgorithm {
   /*-------------------BACKTRACKING ALGORITHM IMPLEMENTED--------------------------*/
   
   /**
-   * MEthod that implements backtracking search algorithm 
+   * Method that implements backtracking search algorithm 
    * @param problem
    * @param deadline
    * @return
    */
   public Schedule backTracking(SchedulingProblem problem, long deadline) {
-    //determines heuristic to be used, 2 orders courses largest to smallest, 1 orders rooms smallest to largest, 0 is no heuristic
-    //heuristic 3 orders both so as to visually check for solutions. It is the most efficient
-    int heuristic = 3;
-
     double[][] distanceTable = setDistances(problem.buildings);
 
     // get an empty solution to start from
     Schedule solution = problem.getEmptySchedule();
-    Stack<Option> traverse = new Stack<Option>();
+    //Stack to traverse for the backtracking
+    Stack<Next> traverse = new Stack<Next>();
 
-    Option option;
+    Next Next;
     Room room;
     Course course;
     int roomIndex;
     int courseIndex;
 
-    if(heuristic == 1){
-      orderRooms(problem.rooms);
-    } else if(heuristic == 2){
-      orderCourses(problem.courses);
-    } else if(heuristic == 3){
-      orderCourses(problem.courses);
-      orderRooms(problem.rooms);
-    }
+    /**Order rooms and courses by distance to provide the best solution possible */
+    orderCourses(problem.courses);
+    orderRooms(problem.rooms);
 
-    for(int i = 0; i < problem.courses.size(); i++){
-      System.out.print(problem.courses.get(i).enrolledStudents + " ");
-    }
-    System.out.println();
-    for(int i = 0; i < problem.rooms.size(); i++){
-      System.out.print(problem.rooms.get(i).capacity + " ");
-    }
-    System.out.println();
 
     for(int i = 0; i < problem.rooms.size(); i++){
       int students = (course = problem.courses.get(0)).enrolledStudents;
       if((room = problem.rooms.get(i)).capacity >= students){             //no need to check time slots, they're all open
-        traverse.push(new Option(course, room));                           //if room is larger than enrollment, add
+        traverse.push(new Next(course, room));                           //if room size is more than the enrollment of a course
       }
     }
 
     while(!traverse.isEmpty()){
       if(System.currentTimeMillis() == deadline) break;
 
-      option = (Option) traverse.pop();
+      Next = (Next) traverse.pop();
 
-      room = option.R;
-      course = option.C;
+      room = Next.R;
+      course = Next.C;
       roomIndex = getRoomIndex(problem.rooms, room);
       courseIndex = getCourseIndex(problem.courses, course);
 
@@ -226,7 +210,6 @@ public class SearchAlgorithm {
         }
       }
 
-      //System.out.println(solution);                                     //print solution so far
 
       if(courseIndex == problem.courses.size()-1) break;                  //check if this is the last course
 
@@ -237,7 +220,7 @@ public class SearchAlgorithm {
           for (int j = 0; j < problem.NUM_TIME_SLOTS; j++) {              //find one with appropriate slot and size
             if (course.timeSlotValues[j] > 0) {
               if (solution.schedule[i][j] < 0) {
-                traverse.push(new Option(course, room));
+                traverse.push(new Next(course, room));
                 nextExists = true;
                 break;                                                    //just one empty slot makes the solution valid
               }
@@ -250,11 +233,10 @@ public class SearchAlgorithm {
       //reorder according to building priority
       orderLocation(traverse, distanceTable, courseIndex, problem.buildings, problem.courses);
 
-      //backtracking occurs here
+      //Here we backtrack if there is no next option (we reached the deepest area)
       if(!nextExists && !traverse.isEmpty()){
-        //System.out.println("backtracking");
-        Course lastChoiceMade = ((Option) traverse.peek()).C;
-        courseIndex = getCourseIndex(problem.courses, lastChoiceMade);
+        Course lastNextMade = ((Next) traverse.peek()).C;
+        courseIndex = getCourseIndex(problem.courses, lastNextMade);
         for(int i = 0; i < solution.schedule.length; i++){
           for(int j = 0; j < solution.schedule[0].length; j++){
             if (solution.schedule[i][j] >= courseIndex){
@@ -282,9 +264,8 @@ public class SearchAlgorithm {
   public int getRoomIndex(ArrayList<Room> rooms, Room room) {
     int roomIndex = -1;
     for (int i = 0; i < rooms.size(); i++) {
-      if (roomIndex >= 0) break;
       if (room.equals(rooms.get(i))) {
-        roomIndex = i;
+        return i;
       }
     }
     return roomIndex;
@@ -299,9 +280,8 @@ public class SearchAlgorithm {
   public int getCourseIndex(ArrayList<Course> courses, Course course){
     int courseIndex = -1;
     for(int i = 0; i < courses.size(); i++) {
-      if (courseIndex >= 0) break;
       if (course.equals(courses.get(i))) {
-        courseIndex = i;
+        return i;
       }
     }
     return courseIndex;
@@ -316,9 +296,8 @@ public class SearchAlgorithm {
   public int getBuildingIndex(ArrayList<Building> buildings, Building building){
     int buildingIndex = -1;
     for(int i = 0; i < buildings.size(); i++) {
-      if (buildingIndex >= 0) break;
       if (building.equals(buildings.get(i))) {
-        buildingIndex = i;
+        return i;
       }
     }
     return buildingIndex;
@@ -367,15 +346,15 @@ public class SearchAlgorithm {
     double[][] table = new double[buildings.size()][buildings.size()];
 
     double var1, var2;
-    Building buildingi, buildingj;
+    Building building1, building2;
 
     for(int i = 0; i < buildings.size(); i++){
       table[i][i] = 0;
-      buildingi = buildings.get(i);
+      building1 = buildings.get(i);
       for(int j = 0; j < buildings.size(); j++){
-        buildingj = buildings.get(j);
-        var1 = (buildingi.xCoord - buildingj.xCoord) * (buildingi.xCoord - buildingj.xCoord);
-        var2 = (buildingi.yCoord - buildingj.yCoord) * (buildingi.yCoord - buildingj.yCoord);
+        building2 = buildings.get(j);
+        var1 = (building1.xCoord - building2.xCoord) * (building1.xCoord - building2.xCoord);
+        var2 = (building1.yCoord - building2.yCoord) * (building1.yCoord - building2.yCoord);
         table[i][j] = Math.sqrt(var1 + var2);
       }
     }
@@ -390,34 +369,35 @@ public class SearchAlgorithm {
    * @param buildings
    * @param courses
    */
-  public void orderLocation(Stack<Option> traverse, double[][] distanceTable, int courseIndex, ArrayList<Building> buildings, ArrayList<Course> courses){
-    ArrayList<Option> temp = new ArrayList<Option>();
-    Option option;
+  public void orderLocation(Stack<Next> traverse, double[][] distanceTable, int courseIndex, ArrayList<Building> buildings, ArrayList<Course> courses){
+    ArrayList<Next> temp = new ArrayList<Next>();
+    Next Next;
 
-    while(!traverse.isEmpty() && getCourseIndex(courses, ((Option) traverse.peek()).C) != courseIndex){
+    while(!traverse.isEmpty() && getCourseIndex(courses, ((Next) traverse.peek()).C) != courseIndex){
       temp.add(traverse.pop());
     }
 
     int currentLocationi, currentLocationj, preferredLocation;
     for(int i = 0; i < temp.size(); i++){
-      currentLocationi = getBuildingIndex(buildings, ((Option)temp.get(i)).R.b);
+      currentLocationi = getBuildingIndex(buildings, ((Next)temp.get(i)).R.b);
       for(int j = 0; j < temp.size(); j++){
         preferredLocation = getBuildingIndex(buildings, courses.get(courseIndex).preferredLocation);
-        currentLocationj = getBuildingIndex(buildings, ((Option)temp.get(j)).R.b);
+        currentLocationj = getBuildingIndex(buildings, ((Next)temp.get(j)).R.b);
         if(distanceTable[preferredLocation][currentLocationi] < distanceTable[preferredLocation][currentLocationj]){
-          option = (Option) temp.get(i);
+          Next = (Next) temp.get(i);
           temp.set(i, temp.get(j));
-          temp.set(j, option);
+          temp.set(j, Next);
         }
       }
     }
 
     for(int i = 0; i < temp.size(); i++){
-      traverse.push((Option) temp.get(i));
+      traverse.push((Next) temp.get(i));
     }
   }
 /*---------------BACKTRACKING ALGORITHM IMPLEMENTED----------------------------*/
 
+/*---------------NAIVE SOLUTION----------------------------------------------- */
   /**
    * 
    * @param problem
