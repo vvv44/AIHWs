@@ -149,30 +149,29 @@ def processCSV():
 with open('placement_data_cleaned.csv') as file:
     read = csv.reader(file)
     lines = list(read)
-    x = np.array(lines)
+    x = np.array(lines).astype(np.float)
     y = x[:,8]
     x = np.delete(x,-1,axis=1)
+    x = np.delete(x,0,axis = 1)
 
-# x = np.array(x).astype(np.float32)
-# y = np.array(y) 
 
-# #Split data into training and testing
-# ind = np.random.permutation(len(y))
-# split_ind = int(len(y)*0.8)
-# x_train = x[ind[:split_ind]]
-# x_test = x[ind[split_ind:]]
-# y_train = y[ind[:split_ind]]
-# y_test = y[ind[split_ind:]]
+#Split data into training and testing
+ind = np.random.permutation(len(y))
+split_ind = int(len(y)*0.8)
+x_train = x[ind[:split_ind]]
+x_test = x[ind[split_ind:]]
+y_train = y[ind[:split_ind]]
+y_test = y[ind[split_ind:]]
 
-# model = DecisionTreeClassifier()
-# model.fit(x_train, y_train)
+model = DecisionTreeClassifier()
+model.fit(x_train, y_train)
 
-# train_pred = model.predict(x_train)
-# test_pred = model.predict(x_test)
+train_pred = model.predict(x_train)
+test_pred = model.predict(x_test)
 
-# train_acc = np.sum(train_pred==y_train)/len(train_pred)
-# print('train accuracy:', train_acc)
-# test_acc = np.sum(test_pred==y_test)/len(test_pred)
-# print('test accuracy:', test_acc)
+train_acc = np.sum(train_pred==y_train)/len(train_pred)
+print('train accuracy:', train_acc)
+test_acc = np.sum(test_pred==y_test)/len(test_pred)
+print('test accuracy:', test_acc)
 
-# model.display()
+model.display()
