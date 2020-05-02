@@ -146,13 +146,53 @@ def processCSV():
         writer = csv.writer(open('placement_data_cleaned.csv', 'w'))
         writer.writerows(lines)
 
-with open('placement_data_cleaned.csv') as file:
+def processIncomeCSV():
+        with open('income_evaluation.csv') as file:
+            read = csv.reader(file)
+            lines = list(read)
+            for row in lines:
+                if(row[9]==' Male' or row[9]=='Male'):
+                    row[9] = 1
+                else:
+                    row[9] = 0
+                del row[1]
+                del row[1]
+                del row[1]
+                del row[2]
+                del row[2]
+                del row[2]
+                del row[4]
+                del row[4]
+                del row[5]
+                if(row[5] == " <=50K" or row[5] == "<=50K"):
+                    row[5] = 0
+                else:
+                    row[5] = 1
+                #we make white be one and other be 0
+                if(row[2] == " White" or row[2] == "White"):
+                    row[2] = 1
+                else:
+                    row[2] = 0
+            del lines[0]
+        writer = csv.writer(open('income_evaluation_cleansed.csv', 'w',newline=''))
+        writer.writerows(lines)
+
+# processIncomeCSV()
+
+# with open('placement_data_cleaned.csv') as file:
+#     read = csv.reader(file)
+#     lines = list(read)
+#     x = np.array(lines).astype(np.float)
+#     y = x[:,8]
+#     x = np.delete(x,-1,axis=1)
+#     x = np.delete(x,0,axis = 1)
+
+with open('income_evaluation_cleansed.csv') as file:
     read = csv.reader(file)
     lines = list(read)
     x = np.array(lines).astype(np.float)
-    y = x[:,8]
-    x = np.delete(x,-1,axis=1)
-    x = np.delete(x,0,axis = 1)
+    y = x[:,5]
+    x = np.delete(x,-1,axis = 1)
 
 
 #Split data into training and testing
