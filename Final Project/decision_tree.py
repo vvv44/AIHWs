@@ -177,8 +177,8 @@ def processIncomeCSV():
         writer = csv.writer(open('income_evaluation_cleansed.csv', 'w',newline=''))
         writer.writerows(lines)
 
-# processIncomeCSV()
 
+#Code for the first dataset
 # with open('placement_data_cleaned.csv') as file:
 #     read = csv.reader(file)
 #     lines = list(read)
@@ -187,6 +187,7 @@ def processIncomeCSV():
 #     x = np.delete(x,-1,axis=1)
 #     x = np.delete(x,0,axis = 1)
 
+#code for the second dataset
 with open('income_evaluation_cleansed.csv') as file:
     read = csv.reader(file)
     lines = list(read)
@@ -214,4 +215,28 @@ print('train accuracy:', train_acc)
 test_acc = np.sum(test_pred==y_test)/len(test_pred)
 print('test accuracy:', test_acc)
 
+
+
+
+#Prun the tree, by getting rid of unnecessary comparisons(nodes), collapsing those 
+#which children classify to the same number. (Done for decision trees)
+def post_prunning_decision_tree(root):
+    if isinstance(root,int):
+        return root
+    #Do left subtree then right subtree
+    root.left = post_prunning_decision_tree(root.left)
+    root.right = post_prunning_decision_tree(root.right)
+    #if classifications are same
+    if root.left==root.right:
+        #Give value to substitute the root for
+        new_root = root.left
+        temp = root
+        root = None
+        del(temp)
+        return new_root
+    else:
+        return root
+
+
+post_prunning_decision_tree(model.root)
 model.display()
